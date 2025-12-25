@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Trading Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #fff;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+        }
+        
+        .stat {
+            margin: 15px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4ade80;
+        }
+        
+        .stat-value.negative {
+            color: #f87171;
+        }
+        
+        .positions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .positions-table th {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+        
+        .positions-table td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .positions-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .positive {
+            color: #4ade80;
+        }
+        
+        .negative {
+            color: #f87171;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        button.start {
+            background: #10b981;
+        }
+        
+        button.stop {
+            background: #ef4444;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ Fast Trading Terminal</h1>
+            <p class="subtitle">Real-time Algorithmic Trading Dashboard</p>
+        </header>
+        
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2>Account Summary</h2>
+                <div class="stat">
+                    <div class="stat-label">Total Balance</div>
+                    <div class="stat-value" id="balance">$100,000.00</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Daily P&L</div>
+                    <div class="stat-value positive" id="daily-pnl">+$1,250.50</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Total P&L</div>
+                    <div class="stat-value positive" id="total-pnl">+$12,450.75</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Buying Power</div>
+                    <div class="stat-value" id="buying-power">$300,000.00</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Trading Activity</h2>
+                <div class="stat">
+                    <div class="stat-label">Active Positions</div>
+                    <div class="stat-value" id="active-positions">5</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Today's Trades</div>
+                    <div class="stat-value" id="today-trades">42</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Win Rate</div>
+                    <div class="stat-value positive" id="win-rate">68.5%</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Avg Trade</div>
+                    <div class="stat-value positive" id="avg-trade">+$297.50</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Risk Metrics</h2>
+                <div class="stat">
+                    <div class="stat-label">Max Drawdown</div>
+                    <div class="stat-value negative" id="drawdown">-$2,450.00</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Sharpe Ratio</div>
+                    <div class="stat-value" id="sharpe">2.45</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Position Used</div>
+                    <div class="stat-value" id="position-used">35%</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Risk Score</div>
+                    <div class="stat-value" id="risk-score">LOW</div>
+                </div>
+            </div>
+            
+            <div class="card" style="grid-column: span 2;">
+                <h2>Current Positions</h2>
+                <table class="positions-table">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Quantity</th>
+                            <th>Avg Price</th>
+                            <th>Current Price</th>
+                            <th>P&L</th>
+                            <th>P&L %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="positions-body">
+                        <!-- Positions will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h2>Controls</h2>
+                <div class="controls">
+                    <button class="start" onclick="startTrading()">▶ Start Trading</button>
+                    <button class="stop" onclick="stopTrading()">⏹ Stop Trading</button>
+                    <button onclick="resetPaper()">🔄 Reset Paper</button>
+                </div>
+                <div style="margin-top: 20px;">
+                    <div class="stat">
+                        <div class="stat-label">Trading Mode</div>
+                        <div class="stat-value" id="trading-mode">PAPER</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Strategy</div>
+                        <div class="stat-value" id="strategy">Market Maker</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Fast Trading Terminal v1.0 | Paper Trading Simulation | Data updates every 3 seconds</p>
+            <p>⚠️ This is a simulation. Past performance does not guarantee future results.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Mock data for demonstration
+        const positions = [
+            { symbol: 'AAPL', quantity: 100, avgPrice: 145.50, currentPrice: 150.25 },
+            { symbol: 'MSFT', quantity: 50, avgPrice: 325.75, currentPrice: 330.10 },
+            { symbol: 'GOOGL', quantity: 25, avgPrice: 135.20, currentPrice: 140.50 },
+            { symbol: 'TSLA', quantity: 30, avgPrice: 210.30, currentPrice: 215.75 },
+            { symbol: 'AMZN', quantity: 20, avgPrice: 145.80, currentPrice: 143.25 }
+        ];
+
+        function updatePositions() {
+            const tbody = document.getElementById('positions-body');
+            tbody.innerHTML = '';
+            
+            positions.forEach(pos => {
+                const pnl = (pos.currentPrice - pos.avgPrice) * pos.quantity;
+                const pnlPercent = ((pos.currentPrice - pos.avgPrice) / pos.avgPrice * 100).toFixed(2);
+                const pnlClass = pnl >= 0 ? 'positive' : 'negative';
+                
+                const row = `
+                    <tr>
+                        <td>${pos.symbol}</td>
+                        <td>${pos.quantity}</td>
+                        <td>$${pos.avgPrice.toFixed(2)}</td>
+                        <td>$${pos.currentPrice.toFixed(2)}</td>
+                        <td class="${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
+                        <td class="${pnlClass}">${pnl >= 0 ? '+' : ''}${pnlPercent}%</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function updateMetrics() {
+            // Simulate random changes
+            const balance = 100000 + Math.random() * 5000 - 2500;
+            const dailyPnl = Math.random() * 3000 - 1500;
+            const totalPnl = 12450 + Math.random() * 2000 - 1000;
+            
+            document.getElementById('balance').textContent = `$${balance.toFixed(2)}`;
+            document.getElementById('daily-pnl').textContent = `${dailyPnl >= 0 ? '+' : '-'}$${Math.abs(dailyPnl).toFixed(2)}`;
+            document.getElementById('daily-pnl').className = `stat-value ${dailyPnl >= 0 ? 'positive' : 'negative'}`;
+            document.getElementById('total-pnl').textContent = `${totalPnl >= 0 ? '+' : '-'}$${Math.abs(totalPnl).toFixed(2)}`;
+            
+            // Update some prices randomly
+            positions.forEach(pos => {
+                pos.currentPrice += (Math.random() - 0.5) * 2;
+                pos.currentPrice = Math.max(pos.currentPrice, pos.avgPrice * 0.9);
+                pos.currentPrice = Math.min(pos.currentPrice, pos.avgPrice * 1.1);
+            });
+            
+            updatePositions();
+        }
+
+        function startTrading() {
+            alert('Trading started! (Simulation)');
+            document.getElementById('trading-mode').textContent = 'LIVE';
+        }
+
+        function stopTrading() {
+            alert('Trading stopped!');
+            document.getElementById('trading-mode').textContent = 'STOPPED';
+        }
+
+        function resetPaper() {
+            if (confirm('Reset paper trading account to $100,000?')) {
+                alert('Account reset!');
+                updateMetrics();
+            }
+        }
+
+        // Initial update
+        updatePositions();
+        
+        // Update metrics every 3 seconds
+        setInterval(updateMetrics, 3000);
+    </script>
+</body>
+</html>

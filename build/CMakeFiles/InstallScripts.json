@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/cmake_install.cmake",
+		"C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/src/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

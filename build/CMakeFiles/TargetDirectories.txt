@@ -1,0 +1,13 @@
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/CMakeFiles/edit_cache.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/CMakeFiles/rebuild_cache.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/CMakeFiles/list_install_components.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/CMakeFiles/install.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/CMakeFiles/install/local.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/CMakeFiles/install/strip.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/src/CMakeFiles/algo_trader.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/src/CMakeFiles/edit_cache.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/src/CMakeFiles/rebuild_cache.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/src/CMakeFiles/list_install_components.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/src/CMakeFiles/install.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/src/CMakeFiles/install/local.dir
+C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/src/CMakeFiles/install/strip.dir

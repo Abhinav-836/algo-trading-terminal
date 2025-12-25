@@ -1,0 +1,8 @@
+[
+{
+  "directory": "C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -IC:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/src -IC:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/src/core -IC:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/src/exchange -IC:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/src/strategies -IC:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/src/data -IC:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/src/live -IC:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/src/utils -g -O0 -Wall -Wextra -std=c++20 -o src\\CMakeFiles\\algo_trader.dir\\main.cpp.obj -c C:\\Users\\Anchal\\OneDrive\\Desktop\\algo_trading_terminal\\src\\main.cpp",
+  "file": "C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/src/main.cpp",
+  "output": "C:/Users/Anchal/OneDrive/Desktop/algo_trading_terminal/build/src/CMakeFiles/algo_trader.dir/main.cpp.obj"
+}
+]
