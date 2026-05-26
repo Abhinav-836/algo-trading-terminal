@@ -5,30 +5,8 @@
 #include <vector>
 #include <string>
 #include <chrono>
-
-class Tick {
-
-public:
-
-    uint64_t timestamp;
-
-    std::string symbol;
-
-    double price;
-
-    double volume;
-
-    double bid;
-
-    double ask;
-
-
-
-    Tick(uint64_t ts, const std::string& sym, double pr, double vol, double b, double a)
-
-        : timestamp(ts), symbol(sym), price(pr), volume(vol), bid(b), ask(a) {}
-
-};
+#include <algorithm>
+#include <cstdlib>
 
 class HistoricalData {
 private:
@@ -36,8 +14,11 @@ private:
     
 public:
     HistoricalData() {
-        // Create data directory if it doesn't exist
-        system("mkdir -p data");
+#ifdef _WIN32
+        system(("mkdir " + data_dir).c_str());
+#else
+        system(("mkdir -p " + data_dir).c_str());
+#endif
     }
     
     bool save_tick(const Tick& tick, const std::string& filename = "ticks.csv") {
@@ -140,6 +121,10 @@ public:
         if (!data_dir.empty() && data_dir.back() != '/') {
             data_dir += '/';
         }
+#ifdef _WIN32
+        system(("mkdir " + data_dir).c_str());
+#else
         system(("mkdir -p " + data_dir).c_str());
+#endif
     }
 };

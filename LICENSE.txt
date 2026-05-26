@@ -1,0 +1,37 @@
+PERSONAL USE SOFTWARE LICENSE
+
+Copyright © 2025 Abhinav Ashutosh
+All rights reserved.
+
+1. License Grant
+
+This license grants you a non-exclusive, non-transferable right to use this software for personal, non-commercial use only.
+
+2. Restrictions
+
+You may NOT:
+
+Use the software for commercial or professional purposes
+
+Redistribute, resell, or share the software
+
+Publish the software or any part of it
+
+Reverse engineer, decompile, or disassemble the software
+
+Modify the software and distribute modified versions
+
+3. Ownership
+
+The software and all related intellectual property remain the exclusive property of the author.
+No ownership rights are transferred.
+
+4. Disclaimer
+
+The software is provided “AS IS”, without warranty of any kind.
+The author is not responsible for losses, damages, or trading outcomes.
+
+5. Termination
+
+This license terminates automatically if any term is violated.
+Upon termination, all copies must be deleted.

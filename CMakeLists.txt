@@ -1,26 +1,42 @@
-cmake_minimum_required(VERSION 3.15)
-project(algo_trading_terminal VERSION 1.0.0)
+cmake_minimum_required(VERSION 3.16)
+project(AlgoTrader VERSION 3.0.0)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Optimizations
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -mtune=native -flto -ffast-math -DNDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra")
+# Find required packages
+find_package(Threads REQUIRED)
+find_package(CURL REQUIRED)
+find_package(OpenSSL REQUIRED)
 
-# Check if src directory exists before adding
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src)
-    add_subdirectory(src)
-else()
-    message(WARNING "src directory not found, creating minimal setup...")
-    
-    # Create minimal executable directly
-    add_executable(algo_trader src/main.cpp)
-    target_include_directories(algo_trader PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+# Include directories
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CURL_INCLUDE_DIRS})
+include_directories(${OPENSSL_INCLUDE_DIR})
+
+# Find all source files
+file(GLOB_RECURSE SOURCES 
+    "src/*.cpp"
+    "src/*.cxx"
+    "src/*.cc"
+)
+
+# Create executable
+add_executable(algo_trader ${SOURCES})
+
+# Link libraries - ORDER MATTERS!
+target_link_libraries(algo_trader
+    ${CURL_LIBRARIES}
+    ${OPENSSL_LIBRARIES}
+    Threads::Threads
+)
+
+# Windows specific
+if(WIN32)
+    target_link_libraries(algo_trader ws2_32)
 endif()
 
-# Install target (only if target exists)
-if(TARGET algo_trader)
-    install(TARGETS algo_trader DESTINATION bin)
-endif()
+message(STATUS "Build configuration:")
+message(STATUS "  C++ Standard: ${CMAKE_CXX_STANDARD}")
+message(STATUS "  CURL Found: ${CURL_FOUND}")
+message(STATUS "  OpenSSL Found: ${OPENSSL_FOUND}")
