@@ -14,7 +14,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CURL_INCLUDE_DIRS})
 include_directories(${OPENSSL_INCLUDE_DIR})
 
-# Find all source files
+# Find ALL source files recursively
 file(GLOB_RECURSE SOURCES 
     "src/*.cpp"
     "src/*.cxx"
@@ -24,7 +24,7 @@ file(GLOB_RECURSE SOURCES
 # Create executable
 add_executable(algo_trader ${SOURCES})
 
-# Link libraries - ORDER MATTERS!
+# Link libraries
 target_link_libraries(algo_trader
     ${CURL_LIBRARIES}
     ${OPENSSL_LIBRARIES}
@@ -40,3 +40,4 @@ message(STATUS "Build configuration:")
 message(STATUS "  C++ Standard: ${CMAKE_CXX_STANDARD}")
 message(STATUS "  CURL Found: ${CURL_FOUND}")
 message(STATUS "  OpenSSL Found: ${OPENSSL_FOUND}")
+message(STATUS "  Source files: ${SOURCES}")

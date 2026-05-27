@@ -27,25 +27,25 @@ strategies:
     - momentum
     - weighted
   
-  # Momentum Strategy Parameters
+  # Momentum Strategy Parameters - Optimized for intraday
   momentum:
     enabled: true
     position_size: 10            # Number of shares per trade
     rsi_upper: 70                # Overbought threshold
     rsi_lower: 30                # Oversold threshold
-    trailing_stop_pct: 0.02      # 2% trailing stop
-    take_profit_pct: 0.05        # 5% take profit
-    max_hold_seconds: 300        # 5 minutes max hold
+    trailing_stop_pct: 0.01      # 1% trailing stop (was 2%)
+    take_profit_pct: 0.015       # 1.5% take profit (was 5% - too high!)
+    max_hold_seconds: 180        # 3 minutes max hold (was 300)
   
-  # Weighted Strategy Parameters (More sophisticated)
+  # Weighted Strategy Parameters - Optimized for intraday
   weighted:
     enabled: true
     position_size: 10
     entry_threshold: 0.60        # 60%+ weighted score to enter
     exit_threshold: 0.30         # Exit if score drops below 30%
-    trailing_stop_pct: 0.015     # 1.5% trailing stop
-    take_profit_pct: 0.03        # 3% take profit
-    max_hold_seconds: 180        # 3 minutes max hold
+    trailing_stop_pct: 0.01      # 1% trailing stop (was 1.5%)
+    take_profit_pct: 0.02        # 2% take profit (was 3%)
+    max_hold_seconds: 120        # 2 minutes max hold (was 180)
     
     # Indicator Weights for Weighted Strategy
     weights:
@@ -54,12 +54,24 @@ strategies:
       volume_weight: 0.20        # Volume confirmation
       vwap_weight: 0.20          # Intraday reference
   
-  # Scalper Strategy (Optional)
+  # Per-Symbol Custom Settings (Volatile stocks get different targets)
+  symbol_overrides:
+    TSLA:
+      take_profit_pct: 0.03      # 3% for Tesla
+      trailing_stop_pct: 0.02    # 2% trailing stop
+    NVDA:
+      take_profit_pct: 0.03      # 3% for Nvidia
+      trailing_stop_pct: 0.02    # 2% trailing stop
+    AAPL:
+      take_profit_pct: 0.012     # 1.2% for Apple
+      trailing_stop_pct: 0.008   # 0.8% trailing stop
+  
+  # Scalper Strategy (Optional - for very quick trades)
   scalper:
     enabled: false               # Set to true to enable
     position_size: 100.0
-    take_profit_pct: 0.001
-    stop_loss_pct: 0.0005
+    take_profit_pct: 0.003       # 0.3% quick profit
+    stop_loss_pct: 0.0015        # 0.15% stop loss
   
   # Market Maker Strategy (Optional)
   market_maker:
@@ -69,15 +81,51 @@ strategies:
     max_inventory: 1000.0
 
 # ═══════════════════════════════════════════════════════════════════════════
-# RISK MANAGEMENT
+# RISK MANAGEMENT - Optimized for intraday
 # ═══════════════════════════════════════════════════════════════════════════
 risk:
-  max_position_size: 10000.0     # Max $ value per position
-  max_portfolio_exposure: 50000.0 # Total portfolio exposure
-  max_daily_loss: 5000.0         # Stop trading after this loss
-  max_order_size: 1000.0         # Max $ per single order
-  min_balance: 1000.0            # Minimum cash balance
-  max_daily_trades: 100          # Maximum trades per day
+  max_position_size: 5000.0      # Max $5k per position (was $10k)
+  max_portfolio_exposure: 25000.0 # Max $25k total exposure (was $50k)
+  max_daily_loss: 2000.0         # Stop after $2k loss (was $5k)
+  max_order_size: 1000.0         # Max $1k per order
+  min_balance: 5000.0            # Min $5k cash balance (was $1k)
+  max_daily_trades: 50           # Max 50 trades per day (was 100)
+  
+  # Advanced Risk Parameters
+  max_correlation_exposure: 0.30  # Max 30% in correlated sectors
+  max_single_sector: 0.40         # Max 40% in one sector
+  max_leverage: 2.0               # Max 2x leverage
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CIRCUIT BREAKER SETTINGS
+# ═══════════════════════════════════════════════════════════════════════════
+circuit_breaker:
+  daily_loss_limit: 0.02         # 2% daily loss limit (was 5%)
+  max_daily_trades: 50           # Max 50 trades per day
+  auto_reset_time: "09:30"       # Reset at market open
+  blackout_period_after_loss: 300 # 5 min cooldown after loss
+
+# ═══════════════════════════════════════════════════════════════════════════
+# KELLY POSITION SIZING
+# ═══════════════════════════════════════════════════════════════════════════
+kelly:
+  enabled: true
+  max_kelly_fraction: 0.25       # Use half-Kelly (conservative)
+  min_trades_for_kelly: 20       # Minimum trades before using Kelly
+  default_risk_per_trade: 0.02   # 2% default risk per trade
+
+# ═══════════════════════════════════════════════════════════════════════════
+# REGIME DETECTION
+# ═══════════════════════════════════════════════════════════════════════════
+regime:
+  high_vol_threshold: 0.015      # 1.5% volatility = high vol
+  low_vol_threshold: 0.005       # 0.5% volatility = low vol
+  crash_threshold: 0.03          # 3% volatility = crash mode
+  position_multipliers:
+    low_vol_bull: 1.2            # Increase size in calm markets
+    normal_bull: 1.0             # Normal size
+    high_vol_bear: 0.5           # Half size in volatile markets
+    crash: 0.0                   # Stop trading in crash
 
 # ═══════════════════════════════════════════════════════════════════════════
 # DATA SETTINGS
@@ -85,6 +133,8 @@ risk:
 data:
   historical_data_dir: ./data
   replay_speed: 1.0              # 1x = realtime, 2x = faster
+  max_history_ticks: 1000        # Keep last 1000 ticks per symbol
+  cache_size: 10000              # Cache up to 10,000 ticks
 
 # ═══════════════════════════════════════════════════════════════════════════
 # LOGGING
@@ -93,6 +143,8 @@ logging:
   level: INFO                    # DEBUG, INFO, WARNING, ERROR
   file: ./logs/trading.log
   console: true
+  max_file_size_mb: 100          # Rotate log at 100MB
+  backup_count: 5                # Keep 5 backup log files
 
 # ═══════════════════════════════════════════════════════════════════════════
 # PERFORMANCE
@@ -100,3 +152,14 @@ logging:
 performance:
   latency_tracking: true
   status_update_interval: 10     # Seconds between status updates
+  metrics_export_enabled: false  # Enable for Prometheus export
+  metrics_port: 9090              # Prometheus metrics port
+
+# ═══════════════════════════════════════════════════════════════════════════
+# EXCHANGE CONNECTION
+# ═══════════════════════════════════════════════════════════════════════════
+exchange:
+  reconnect_attempts: 5          # Number of reconnection attempts
+  reconnect_delay_seconds: 5     # Delay between reconnection attempts
+  heartbeat_interval: 30         # Heartbeat every 30 seconds
+  order_timeout_seconds: 10      # Order timeout after 10 seconds
