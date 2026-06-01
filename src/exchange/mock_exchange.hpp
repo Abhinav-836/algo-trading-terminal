@@ -7,6 +7,7 @@
 #include <random>
 #include <atomic>
 #include <functional>
+#include <mutex>
 
 // FIX: Original used std::rand() which is not thread-safe and has poor
 // distribution. Replaced with <random> throughout.

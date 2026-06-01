@@ -33,7 +33,7 @@ cmake --build .
 
 Run the terminal application:
 
-./algo_trading_terminal
+./algo_trader.exe --config ../config.yaml
 
 📈 Strategies
 Momentum Strategy
