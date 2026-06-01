@@ -30,8 +30,16 @@ struct Tick {
     
     std::string time_str() const {
         time_t t = static_cast<time_t>(timestamp / 1000000000);
+        struct tm tm_result;
+        // FIX #10: Use thread-safe localtime_r (POSIX) / localtime_s (MSVC)
+        // instead of std::localtime() which shares a static internal buffer.
+#ifdef _WIN32
+        localtime_s(&tm_result, &t);
+#else
+        localtime_r(&t, &tm_result);
+#endif
         std::stringstream ss;
-        ss << std::put_time(std::localtime(&t), "%H:%M:%S");
+        ss << std::put_time(&tm_result, "%H:%M:%S");
         return ss.str();
     }
 };
